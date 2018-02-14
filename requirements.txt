@@ -1,1 +1,9 @@
-scikit-learn==0.19.1
+cycler==0.10.0
+matplotlib==2.1.2
+nltk==3.2.5
+numpy==1.14.0
+pyparsing==2.2.0
+python-dateutil==2.6.1
+pytz==2018.3
+scipy==1.0.0
+six==1.11.0
