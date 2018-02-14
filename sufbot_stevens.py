@@ -3,15 +3,19 @@
 import nltk
 from nltk.probability import ConditionalFreqDist
 from nltk.corpus import genesis
+from nltk.tokenize import RegexpTokenizer
+
 import random
 
-fname = "titles/illinois.txt"
+fname = "lyrics/lyrics.txt"
 
 
 with open(fname) as f:
-    titles = f.read().splitlines()
+    lyrics = f.read().splitlines()
 
-tokens = nltk.word_tokenize(" ".join(titles))
+tokenizer = RegexpTokenizer(r'\w+')
+
+tokens = tokenizer.tokenize(" ".join(lyrics))
 
 text = nltk.Text(tokens)
 
@@ -22,7 +26,7 @@ def cfd(text, maxhistory):
     return ConditionalFreqDist([(tuple(a), b) for *a,b in ngrams])
 
 
-def generate(seed, cfd, maxhistory, maxcount=10):
+def generate(seed, cfd, maxhistory, maxcount=15):
     for i in range(maxcount):
         for j in range(maxhistory-1, 0, -1):
             if tuple(seed[-j:]) in cfd:
@@ -38,8 +42,8 @@ def generate(seed, cfd, maxhistory, maxcount=10):
                 continue
     return seed
 
-maxhistory = 5
+maxhistory = 3
 cfd = cfd(text, maxhistory)
-generated = generate(['Hawk'], cfd, maxhistory)
+generated = generate([random.choice(tokens)], cfd, maxhistory)
 
 print(" ".join(generated))
