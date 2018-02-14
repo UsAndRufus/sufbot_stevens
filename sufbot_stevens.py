@@ -1,4 +1,8 @@
+# Based on this example: https://pythonnlp.quora.com/Generating-Random-Texts-with-NLTK
+
 import nltk
+from nltk.probability import ConditionalFreqDist
+from nltk.corpus import genesis
 
 fname = "titles/illinois.txt"
 
@@ -10,6 +14,14 @@ tokens = nltk.word_tokenize(" ".join(titles))
 
 text = nltk.Text(tokens)
 
-model = nltk.ngrams(text, 3)
+ngrams = nltk.ngrams(text, 2)
 
-print(nltk.parse.generate(model, 5))
+def cfd(ngrams):
+    return ConditionalFreqDist([(tuple(a), b) for *a,b in ngrams])
+
+def generate(seed, cfd, maxcount=10):
+    for i in range(maxcount):
+        seed.append(cfd[tuple(seed[-1:])].max())
+    return seed
+
+print(generate(['Concerning'], cfd(ngrams)))
